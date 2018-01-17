@@ -65,3 +65,24 @@ void Shape::draw(){
 		glVertex2fv(vertices[i].data);
 	glEnd();
 }
+
+// ŽÀ‘•‚Ì•û‚Éstatic‚Í•s—v
+Shape* Shape::generateSnowball(Vector2f origin, float radius) {
+	Shape* snowball = new Shape();
+	const int segments = 18;
+	//Cool circle algorithm: http://slabode.exofire.net/circle_draw.shtml
+	float theta = 6.283185307 / (float)segments,
+		tan_fac = tan(theta),
+		cos_fac = cos(theta),
+		x = radius,
+		y = 0;
+	for (int i = 0; i<segments; i++) {
+		snowball->addPoint(x + origin[0], y + origin[1]);
+		float flip_x = -y, flip_y = x;
+		x += flip_x*tan_fac;
+		y += flip_y*tan_fac;
+		x *= cos_fac;
+		y *= cos_fac;
+	}
+	return snowball;
+}

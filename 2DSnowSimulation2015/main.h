@@ -25,10 +25,8 @@ void start_simulation();
 void simulate();
 float adaptive_timestep();
 
-//Shape stuff
-void create_new_shape();
-void remove_all_shapes();
-Shape* generateSnowball(Vector2f origin, float radius);
+GLFWwindow* initGLFWContext();
+void initGLContext();
 
 #endif
 

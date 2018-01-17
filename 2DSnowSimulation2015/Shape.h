@@ -24,6 +24,8 @@ public:
 	float volume();
 	//Bounding box for shape
 	void bounds(float bounds[4]);
+
+	static Shape* generateSnowball(Vector2f origin, float radius);
 	
 	void draw();
 };

@@ -25,10 +25,9 @@ void initGLContext() {
 	glOrtho(0, WIN_METERS, 0, WIN_METERS, 0, 1);
 }
 
-int main(int argc, char** argv) {
-	srand(time(NULL));
-
+GLFWwindow* initGLFWContext() {
 	glfwSetErrorCallback(error_callback);
+
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
 
@@ -43,6 +42,14 @@ int main(int argc, char** argv) {
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetMouseButtonCallback(window, mouse_callback);
 
+	return window;
+}
+
+int main(int argc, char** argv) {
+	srand(time(NULL));
+
+	
+	GLFWwindow* window = initGLFWContext();
 	initGLContext();
 
 	// -------
@@ -56,8 +63,6 @@ int main(int argc, char** argv) {
 			redraw();
 			dirty_buffer = false;
 		}
-
-
 
 		TIMESTEP = 0.0002;// adaptive_timestep();
 
@@ -127,7 +132,7 @@ void mouse_callback(GLFWwindow* window, int btn, int action, int mods) {
 //Simulation
 void start_simulation() {
 
-	Shape* snowball = generateSnowball(Vector2f(.5, .5), .15);
+	Shape* snowball = Shape::generateSnowball(Vector2f(.5, .5), .15);
 	snow_shapes.push_back(snowball);
 
 	//Convert drawn shapes to snow particles
@@ -191,6 +196,7 @@ void redraw() {
 	//Snow particles
 	if (SUPPORTS_POINT_SMOOTH)
 		glEnable(GL_POINT_SMOOTH);
+
 	glPointSize(point_size);
 	glBegin(GL_POINTS);
 	for (int i = 0; i<snow->size; i++) {
@@ -207,24 +213,4 @@ void redraw() {
 	if (SUPPORTS_POINT_SMOOTH)
 		glDisable(GL_POINT_SMOOTH);
 
-}
-
-Shape* generateSnowball(Vector2f origin, float radius) {
-	Shape* snowball = new Shape();
-	const int segments = 18;
-	//Cool circle algorithm: http://slabode.exofire.net/circle_draw.shtml
-	float theta = 6.283185307 / (float)segments,
-		tan_fac = tan(theta),
-		cos_fac = cos(theta),
-		x = radius,
-		y = 0;
-	for (int i = 0; i<segments; i++) {
-		snowball->addPoint(x + origin[0], y + origin[1]);
-		float flip_x = -y, flip_y = x;
-		x += flip_x*tan_fac;
-		y += flip_y*tan_fac;
-		x *= cos_fac;
-		y *= cos_fac;
-	}
-	return snowball;
 }
