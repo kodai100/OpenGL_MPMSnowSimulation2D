@@ -1,11 +1,15 @@
 #include "PointCloud.h"
 
 PointCloud::PointCloud(){}
+
 PointCloud::PointCloud(int cloud_size){
 	size = cloud_size;
 	particles.reserve(size);
 }
+
+// Copy constructor
 PointCloud::PointCloud(const PointCloud& orig){}
+
 PointCloud::~PointCloud(){}
 
 void PointCloud::scale(Vector2f origin, Vector2f scale){
@@ -15,12 +19,16 @@ void PointCloud::scale(Vector2f origin, Vector2f scale){
 		}
 	}
 }
+
+
 void PointCloud::translate(Vector2f off){
 	for (int i=0; i<size; i++){
 		particles[i].position[0] += off[0];
 		particles[i].position[1] += off[1];
 	}
 }
+
+
 void PointCloud::update(){
 	max_velocity = 0;
 	for (int i=0; i<size; i++){
@@ -33,11 +41,15 @@ void PointCloud::update(){
 			max_velocity = vel;
 	}
 }
+
+
 void PointCloud::merge(const PointCloud& other){
 	size += other.size;
 	particles.reserve(size);
 	particles.insert(particles.end(), other.particles.begin(), other.particles.end());
 }
+
+
 void PointCloud::bounds(float bounds[4]){
 	bounds[0] = particles[0].position[0]; bounds[1] = bounds[0];
 	bounds[2] = particles[0].position[1]; bounds[3] = bounds[2];

@@ -9,16 +9,19 @@ Grid::Grid(Vector2f pos, Vector2f dims, Vector2f cells, PointCloud* object){
 	nodes = new GridNode[nodes_length];
 	node_area = cellsize.product();
 }
+
+// Copy constructor
 Grid::Grid(const Grid& orig){}
+
 Grid::~Grid(){
 	delete[] nodes;
 }
 
-//Maps mass and velocity to the grid
+// Maps mass and velocity to the grid
 void Grid::initializeMass(){
-	//Reset the grid
-	//If the grid is sparsely filled, it may be better to reset individual nodes
-	//Also, not all these variables need to be zeroed, so... yeah
+	// Reset the grid
+	// If the grid is sparsely filled, it may be better to reset individual nodes
+	// Also, not all these variables need to be zeroed, so... yeah
 	memset(nodes, 0, sizeof(GridNode)*nodes_length);
 	
 	//Map particle data to grid
@@ -63,14 +66,20 @@ void Grid::initializeMass(){
 		}
 	}
 }
+
+
 void Grid::initializeVelocities(){
+
 	//We interpolate velocity after mass, to conserve momentum
 	for (int i=0; i<obj->size; i++){
 		Particle& p = obj->particles[i];
+
 		int ox = p.grid_position[0],
 			oy = p.grid_position[1];
+
 		for (int idx=0, y=oy-1, y_end=y+3; y<=y_end; y++){
 			for (int x=ox-1, x_end=x+3; x<=x_end; x++, idx++){
+
 				float w = p.weights[idx];
 				if (w > BSPLINE_EPSILON){
 					//Interpolate velocity
@@ -78,25 +87,32 @@ void Grid::initializeVelocities(){
 					//We could also do a separate loop to divide by nodes[n].mass only once
 					nodes[n].velocity += p.velocity * w * p.mass;
 					nodes[n].active = true;
+
 				}
 			}
 		}
 	}
+
 	for (int i=0; i<nodes_length; i++){
 		GridNode &node = nodes[i];
 		if (node.active)
 			node.velocity /= node.mass;
 	}
+
 	collisionGrid();
 }
-//Maps volume from the grid to particles
-//This should only be called once, at the beginning of the simulation
+
+
+// Maps volume from the grid to particles
+// This should only be called once, at the beginning of the simulation
 void Grid::calculateVolumes() const{
 	//Estimate each particles volume (for force calculations)
 	for (int i=0; i<obj->size; i++){
 		Particle& p = obj->particles[i];
+
 		int ox = p.grid_position[0],
 			oy = p.grid_position[1];
+
 		//First compute particle density
 		p.density = 0;
 		for (int idx=0, y=oy-1, y_end=y+3; y<=y_end; y++){
@@ -108,21 +124,28 @@ void Grid::calculateVolumes() const{
 				}
 			}
 		}
+
 		p.density /= node_area;
+
 		//Volume for each particle can be found from density
 		p.volume = p.mass / p.density;
 	}
 }
+
+
 //Calculate next timestep velocities for use in implicit integration
 void Grid::explicitVelocities(const Vector2f& gravity){
 	//First, compute the forces
 	//We store force in velocity_new, since we're not using that variable at the moment
 	for (int i=0; i<obj->size; i++){
 		Particle& p = obj->particles[i];
+
 		//Solve for grid internal forces
 		Matrix2f energy = p.energyDerivative();
+
 		int ox = p.grid_position[0],
 			oy = p.grid_position[1];
+
 		for (int idx=0, y=oy-1, y_end=y+3; y<=y_end; y++){
 			for (int x=ox-1, x_end=x+3; x<=x_end; x++, idx++){
 				float w = p.weights[idx];
@@ -143,6 +166,7 @@ void Grid::explicitVelocities(const Vector2f& gravity){
 	}
 	collisionGrid();
 }
+
 
 #if ENABLE_IMPLICIT
 //Solve linear system for implicit velocities
@@ -263,6 +287,7 @@ void Grid::recomputeImplicitForces(){
 }
 #endif
 
+
 //Map grid velocities back to particles
 void Grid::updateVelocities() const{
 	for (int i=0; i<obj->size; i++){
@@ -302,9 +327,11 @@ void Grid::updateVelocities() const{
 	collisionParticles();
 }
 
+
 void Grid::collisionGrid(){
 	Vector2f delta_scale = Vector2f(TIMESTEP);
 	delta_scale /= cellsize;
+
 	for (int y=0, idx=0; y<size[1]; y++){
 		for (int x=0; x<size[0]; x++, idx++){
 			//Get grid node (equivalent to (y*size[0] + x))
@@ -328,6 +355,8 @@ void Grid::collisionGrid(){
 		}
 	}
 }
+
+
 void Grid::collisionParticles() const{
 	for (int i=0; i<obj->size; i++){
 		Particle& p = obj->particles[i];

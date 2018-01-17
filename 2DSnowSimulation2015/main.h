@@ -5,9 +5,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
-#include<thread>
 #include <time.h>
-#include <sys/stat.h>
 #include <math.h>
 #include "Particle.h"
 #include "PointCloud.h"
@@ -15,14 +13,15 @@
 #include "SimConstants.h"
 #include "Shape.h"
 
-static void error_callback(int, const char*);
-void key_callback(GLFWwindow*, int, int, int, int);
-void mouse_callback(GLFWwindow*, int, int, int);
 void redraw();
-void start_simulation();
+void initialize_simulation();
 void simulate();
 
 GLFWwindow* initGLFWContext();
+static void error_callback(int, const char*);
+void key_callback(GLFWwindow*, int, int, int, int);
+void mouse_callback(GLFWwindow*, int, int, int);
+
 void initGLContext();
 
 #endif

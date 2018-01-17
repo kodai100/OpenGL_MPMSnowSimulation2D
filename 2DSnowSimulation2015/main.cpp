@@ -2,11 +2,7 @@
 
 using namespace std;
 
-bool dirty_buffer = true;
 int frame_count = 0;
-
-int point_size = 2;
-Vector2f gravity = Vector2f(0, GRAVITY);
 
 vector<Shape*> snow_shapes;
 PointCloud* snow = NULL;
@@ -18,38 +14,15 @@ int main(int argc, char** argv) {
 	GLFWwindow* window = initGLFWContext();
 	initGLContext();
 
-	// -------
-	start_simulation();
+	initialize_simulation();
 	
-	float cum_sum = 0;
-	int iter = 0;
+
 	while (!glfwWindowShouldClose(window)) {
-		if (dirty_buffer) {
-			redraw();
-			dirty_buffer = false;
-		}
+		cout << "Frame: " << frame_count++ << endl;
 
-		cum_sum += TIMESTEP;
+		simulate();
 
-		//Initialize FEM grid
-		grid->initializeMass();
-		grid->initializeVelocities();
-		//Compute grid velocities
-		grid->explicitVelocities(gravity);
-#if ENABLE_IMPLICIT
-		if (IMPLICIT_RATIO > 0)
-			grid->implicitVelocities();
-#endif
-		//Map back to particles
-		grid->updateVelocities();
-		//Update particle data
-		snow->update();
-
-		//Redraw snow
-		if (!LIMIT_FPS || cum_sum >= FRAMERATE) {
-			dirty_buffer = true;
-			cum_sum -= FRAMERATE;
-		}
+		redraw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -64,10 +37,8 @@ int main(int argc, char** argv) {
 }
 
 
-
-
 //Simulation
-void start_simulation() {
+void initialize_simulation() {
 
 	Shape* snowball = Shape::generateSnowball(Vector2f(.5, .5), .15);
 	snow_shapes.push_back(snowball);
@@ -85,14 +56,26 @@ void start_simulation() {
 	grid->initializeMass();
 	grid->calculateVolumes();
 
-	simulate();
 }
 
-// Isolate draw process with threading
 void simulate() {
+	//Initialize FEM grid
+	grid->initializeMass();
+	grid->initializeVelocities();
 
-	cout << "Starting simulation..." << endl;
-	
+	//Compute grid velocities
+	grid->explicitVelocities(GRAVITY);
+
+#if ENABLE_IMPLICIT
+	if (IMPLICIT_RATIO > 0)
+		grid->implicitVelocities();
+#endif
+
+	//Map back to particles
+	grid->updateVelocities();
+
+	//Update particle data
+	snow->update();
 }
 
 void redraw() {
@@ -102,7 +85,7 @@ void redraw() {
 
 	//Grid nodes
 	glPointSize(1);
-	glColor3f(0, .2, .5);
+	glColor3f(.2, .2, .2);
 	glBegin(GL_POINTS);
 	for (int i = 0; i<grid->size[0]; i++) {
 		for (int j = 0; j<grid->size[1]; j++)
@@ -114,16 +97,15 @@ void redraw() {
 	if (SUPPORTS_POINT_SMOOTH)
 		glEnable(GL_POINT_SMOOTH);
 
-	glPointSize(point_size);
+	glPointSize(2);
 	glBegin(GL_POINTS);
 	for (int i = 0; i<snow->size; i++) {
 		Particle& p = snow->particles[i];
-		////We can use the particle's density to vary color
-		//float contrast = 0.6;
-		//float density = p.density / DENSITY * contrast;
-		//density += 1 - contrast;
-		//glColor3f(density, density, density);
-		glColor3f(1, 1, 1);
+		// We can use the particle's density to vary color
+		float contrast = 0.6;
+		float density = p.density / DENSITY * contrast;
+		density += 1 - contrast;
+		glColor3f(density, density, density);
 		glVertex2fv(p.position.data);
 	}
 	glEnd();

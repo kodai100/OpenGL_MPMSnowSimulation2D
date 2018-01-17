@@ -1,12 +1,17 @@
 #include "Shape.h"
 
 Shape::Shape(){}
+
+// Copy constructor
 Shape::Shape(const Shape& orig){}
+
 Shape::~Shape(){}
 
 void Shape::addPoint(float x, float y){
 	vertices.push_back(Vector2f(x, y));
 }
+
+
 bool Shape::contains(float x, float y){
 	//Source: http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html	
 	bool result = false;
@@ -19,6 +24,8 @@ bool Shape::contains(float x, float y){
 	}
 	return result;
 }
+
+
 float Shape::area(){
 	//Source: http://www.mathopenref.com/coordpolygonarea2.html
 	float area = 0,
@@ -30,10 +37,14 @@ float Shape::area(){
     }
 	return fabs(area/2);
 }
+
+
 float Shape::volume(){
 	float len = sqrt(area());
 	return len*len*len;
 }
+
+
 void Shape::bounds(float bounds[4]){
 	bounds[0] = vertices[0][0]; bounds[1] = bounds[0];
 	bounds[2] = vertices[0][1]; bounds[3] = bounds[2];
@@ -52,6 +63,7 @@ void Shape::bounds(float bounds[4]){
 	}
 }
 
+
 void Shape::draw(){
 	glColor3f(1, 1, 1);
 	glBegin(GL_POLYGON);
@@ -65,6 +77,7 @@ void Shape::draw(){
 		glVertex2fv(vertices[i].data);
 	glEnd();
 }
+
 
 // ŽÀ‘•‚Ì•û‚Éstatic‚Í•s—v
 Shape* Shape::generateSnowball(Vector2f origin, float radius) {

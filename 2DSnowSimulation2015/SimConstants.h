@@ -20,13 +20,14 @@ static const float
 	MAX_IMPLICIT_ERR = 1e4,		//Maximum allowed error for conjugate residual
 	MIN_IMPLICIT_ERR = 1e-4,	//Minimum allowed error for conjugate residual
 	STICKY = .9,				//Collision stickiness (lower = stickier)
-	GRAVITY = -9.8,
 	TIMESTEP = 0.0001;
 
 //Hardening parameters
 static const float
 	LAMBDA = YOUNGS_MODULUS*POISSONS_RATIO/((1+POISSONS_RATIO)*(1-2*POISSONS_RATIO)),
 	MU = YOUNGS_MODULUS/(2+2*POISSONS_RATIO);
+
+static const Vector2f GRAVITY = Vector2f(0, -9.8);
 
 //Various compiler options
 #define WIN_SIZE 640

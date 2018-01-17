@@ -1,6 +1,7 @@
 #include "Particle.h"
 
 Particle::Particle(){}
+
 Particle::Particle(const Vector2f& pos, const Vector2f& vel, float mass, float lame_lambda, float lame_mu){
 	position.setData(pos);
 	velocity.setData(vel);
@@ -17,25 +18,33 @@ Particle::Particle(const Vector2f& pos, const Vector2f& vel, float mass, float l
 	polar_r.loadIdentity();
 	polar_s.loadIdentity();
 }
+
 Particle::~Particle(){}
 
 void Particle::updatePos(){
 	//Simple euler integration
 	position += TIMESTEP*velocity;
 }
+
+
 void Particle::updateGradient(){
 	//So, initially we make all updates elastic
 	velocity_gradient *= TIMESTEP;
 	velocity_gradient.diag_sum(1);
 	def_elastic.setData(velocity_gradient * def_elastic);
 }
+
+
 void Particle::applyPlasticity(){
 	Matrix2f f_all = def_elastic * def_plastic;
+
 	//We compute the SVD decomposition
 	//The singular values (basically a scale transform) tell us if 
 	//the particle has exceeded critical stretch/compression
 	def_elastic.svd(&svd_w, &svd_e, &svd_v);
+
 	Matrix2f svd_v_trans = svd_v.transpose();
+
 	//Clamp singular values to within elastic region
 	for (int i=0; i<2; i++){
 		if (svd_e[i] < CRIT_COMPRESS)
@@ -43,6 +52,7 @@ void Particle::applyPlasticity(){
 		else if (svd_e[i] > CRIT_STRETCH)
 			svd_e[i] = CRIT_STRETCH;
 	}
+
 #if ENABLE_IMPLICIT
 	//Compute polar decomposition, from clamped SVD
 	polar_r.setData(svd_w*svd_v_trans);
@@ -59,6 +69,8 @@ void Particle::applyPlasticity(){
 	def_plastic = v_cpy*svd_w.transpose()*f_all;
 	def_elastic = w_cpy*svd_v.transpose();
 }
+
+
 const Matrix2f Particle::energyDerivative(){
 	//Adjust lame parameters to account for hardening
 	float harden = exp(HARDENING*(1-def_plastic.determinant())),
@@ -70,6 +82,8 @@ const Matrix2f Particle::energyDerivative(){
 	//Add hardening and volume
 	return volume * harden * temp;
 }
+
+
 #if ENABLE_IMPLICIT
 const Vector2f Particle::deltaForce(const Vector2f& u, const Vector2f& weight_grad){
 	//For detailed explanation, check out the implicit math pdf for details
