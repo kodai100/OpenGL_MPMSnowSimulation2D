@@ -15,15 +15,12 @@
 #include "SimConstants.h"
 #include "Shape.h"
 
-float TIMESTEP;
-
 static void error_callback(int, const char*);
 void key_callback(GLFWwindow*, int, int, int, int);
 void mouse_callback(GLFWwindow*, int, int, int);
 void redraw();
 void start_simulation();
 void simulate();
-float adaptive_timestep();
 
 GLFWwindow* initGLFWContext();
 void initGLContext();

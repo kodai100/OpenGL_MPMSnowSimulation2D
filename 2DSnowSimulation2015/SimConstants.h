@@ -20,10 +20,8 @@ static const float
 	MAX_IMPLICIT_ERR = 1e4,		//Maximum allowed error for conjugate residual
 	MIN_IMPLICIT_ERR = 1e-4,	//Minimum allowed error for conjugate residual
 	STICKY = .9,				//Collision stickiness (lower = stickier)
-	GRAVITY = -9.8;
-
-//Actual timestep is adaptive, based on grid resolution and max velocity
-extern float TIMESTEP;
+	GRAVITY = -9.8,
+	TIMESTEP = 0.0001;
 
 //Hardening parameters
 static const float
@@ -33,12 +31,9 @@ static const float
 //Various compiler options
 #define WIN_SIZE 640
 #define WIN_METERS 1
-#define SLO_MO 0e6
 #define LIMIT_FPS false
 #define REALTIME false
 #define SUPPORTS_POINT_SMOOTH true
-#define SCREENCAST false
-#define SCREENCAST_DIR "../screencast/"
 #define ENABLE_IMPLICIT false
 
 #endif
