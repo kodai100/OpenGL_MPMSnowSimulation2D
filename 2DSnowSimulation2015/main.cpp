@@ -36,15 +36,37 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
+void createSnowman() {
+	Shape* snowball = Shape::generateSnowball(Vector2f(.4, .16), .15, Vector2f(0, 0));
+	snow_shapes.push_back(snowball);
+
+	Shape* snowball2 = Shape::generateSnowball(Vector2f(.4, .4), .1, Vector2f(0, 0));
+	snow_shapes.push_back(snowball2);
+
+	Shape* snowball3 = Shape::generateSnowball(Vector2f(.4, .57), .07, Vector2f(0, 0));
+	snow_shapes.push_back(snowball3);
+
+	Shape* snowball4 = Shape::generateSnowball(Vector2f(.8, .4), .08, Vector2f(-10, 0));
+	snow_shapes.push_back(snowball4);
+}
+
+void createSnowballSmash() {
+	Shape* snowball = Shape::generateSnowball(Vector2f(.8, .6), .15, Vector2f(-10, 0));
+	snow_shapes.push_back(snowball);
+
+	Shape* snowball2 = Shape::generateSnowball(Vector2f(.2, .4), .15, Vector2f(10, 0));
+	snow_shapes.push_back(snowball2);
+}
 
 //Simulation
 void initialize_simulation() {
-
-	Shape* snowball = Shape::generateSnowball(Vector2f(.5, .5), .15);
-	snow_shapes.push_back(snowball);
+	
+	createSnowman();
+	//createSnowballSmash();
+	
 
 	//Convert drawn shapes to snow particles
-	snow = PointCloud::createShape(snow_shapes, Vector2f(0, 0));
+	snow = PointCloud::createShape(snow_shapes);
 
 	//If there are no shapes, we can't do a simulation
 	if (snow == NULL) return;

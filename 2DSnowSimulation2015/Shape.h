@@ -9,8 +9,10 @@
 class Shape {
 public:
 	std::vector<Vector2f> vertices;
+	Vector2f vel;
 	
 	Shape();
+	Shape(Vector2f vel);
 	Shape(const Shape& orig);
 	virtual ~Shape();
 	
@@ -29,7 +31,7 @@ public:
 	//Bounding box for shape
 	void bounds(float bounds[4]);
 
-	static Shape* generateSnowball(Vector2f origin, float radius);
+	static Shape* generateSnowball(Vector2f origin, float radius, Vector2f vel);
 	
 	void draw();
 };

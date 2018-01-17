@@ -1,6 +1,6 @@
 #include "Shape.h"
 
-Shape::Shape(){}
+Shape::Shape(Vector2f vel):vel(vel){}
 
 // Copy constructor
 Shape::Shape(const Shape& orig){}
@@ -80,8 +80,8 @@ void Shape::draw(){
 
 
 // ŽÀ‘•‚Ì•û‚Éstatic‚Í•s—v
-Shape* Shape::generateSnowball(Vector2f origin, float radius) {
-	Shape* snowball = new Shape();
+Shape* Shape::generateSnowball(Vector2f origin, float radius, Vector2f vel) {
+	Shape* snowball = new Shape(vel);
 	const int segments = 18;
 	//Cool circle algorithm: http://slabode.exofire.net/circle_draw.shtml
 	float theta = 6.283185307 / (float)segments,
