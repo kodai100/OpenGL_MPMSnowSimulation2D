@@ -12,5 +12,8 @@ Please check release for use application (built as windows 32bit exe).
 ## Snowball Smash
 ![snowman](https://github.com/kodai100/MPMSnowSimulation2D/blob/master/Thumbnails/smash.gif)
 
+# Dependencies
+- GLFW3
+
 # Attention
 This code is based on Azmisov's 2d MPM implementation : [https://github.com/Azmisov/snow](https://github.com/Azmisov/snow)
