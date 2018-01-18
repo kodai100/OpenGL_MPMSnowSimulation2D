@@ -1,12 +1,14 @@
 #ifndef MAIN_H
 #define	MAIN_H
 
+// -- Note
+// This code is based on Azmisov's 2d MPM implementation : https://github.com/Azmisov/snow
+
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include <math.h>
 #include "Particle.h"
 #include "PointCloud.h"
 #include "Grid.h"

@@ -2,7 +2,6 @@
 #define SCENE
 
 #include <stdlib.h>
-#include <stdio.h>
 #include "Shape.h"
 #include "Vector2f.h"
 

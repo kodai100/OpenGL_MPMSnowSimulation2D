@@ -28,7 +28,6 @@ void render() {
 
 
 
-
 // -------------- GLFW Routine ------------------------
 
 int main(int argc, char** argv) {

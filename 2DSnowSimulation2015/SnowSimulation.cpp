@@ -6,7 +6,7 @@ using namespace std;
 SnowSimulation::SnowSimulation(Scene* scene) {
 	frameCount = 0;
 	
-	//Convert drawn shapes to snow particles
+	// Convert shapes to snow particles
 	snow = PointCloud::createShape(scene->snow_shapes);
 	if (snow == NULL) return;
 

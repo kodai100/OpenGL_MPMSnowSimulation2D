@@ -4,9 +4,6 @@
 #include "PointCloud.h"
 #include "Grid.h"
 #include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <math.h>
 #include "Particle.h"
 #include "PointCloud.h"
 #include "Grid.h"
@@ -18,7 +15,7 @@ class SnowSimulation {
 public:
 	int frameCount;
 	Grid* grid;
-	PointCloud* snow;	// null check
+	PointCloud* snow;
 
 	SnowSimulation(Scene* scene);
 	SnowSimulation(const SnowSimulation& orig);
