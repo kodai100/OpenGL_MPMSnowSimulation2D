@@ -155,6 +155,7 @@
     <ClInclude Include="PointCloud.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="SimConstants.h" />
+    <ClInclude Include="SnowSimulation.h" />
     <ClInclude Include="Vector2f.h" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,7 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PointCloud.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="SnowSimulation.cpp" />
     <ClCompile Include="Vector2f.cpp" />
   </ItemGroup>
   <ItemGroup>
