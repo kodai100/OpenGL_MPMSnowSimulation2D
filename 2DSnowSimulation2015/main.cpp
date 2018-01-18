@@ -13,8 +13,8 @@ int main(int argc, char** argv) {
 	GLFWwindow* window = initGLFWContext();
 	initGLContext();
 
-	initialize_simulation();
-	
+	Scene* scene = Scene::snowman();
+	snow_simulator = new SnowSimulation(scene);
 
 	while (!glfwWindowShouldClose(window)) {
 		cout << "Frame: " << frame_count++ << endl;
@@ -33,51 +33,6 @@ int main(int argc, char** argv) {
 	exit(EXIT_SUCCESS);
 
 	return 0;
-}
-
-void createSnowman() {
-	Shape* snowball = Shape::generateSnowball(Vector2f(1, .16), .15, Vector2f(0, 0));
-	snow_shapes.push_back(snowball);
-
-	Shape* snowball2 = Shape::generateSnowball(Vector2f(1, .4), .1, Vector2f(0, 0));
-	snow_shapes.push_back(snowball2);
-
-	Shape* snowball3 = Shape::generateSnowball(Vector2f(1, .57), .07, Vector2f(0, 0));
-	snow_shapes.push_back(snowball3);
-
-	Shape* snowball4 = Shape::generateSnowball(Vector2f(1.8, .4), .08, Vector2f(-20, -5));
-	snow_shapes.push_back(snowball4);
-}
-
-void createSnowballSmash() {
-	Shape* snowball = Shape::generateSnowball(Vector2f(1.6, .65), .15, Vector2f(-10, 0));
-	snow_shapes.push_back(snowball);
-
-	Shape* snowball2 = Shape::generateSnowball(Vector2f(.3, .4), .15, Vector2f(10, 0));
-	snow_shapes.push_back(snowball2);
-}
-
-void createHighspeedSnowballSmash() {
-	Shape* snowball = Shape::generateSnowball(Vector2f(1.6, .6), .15, Vector2f(-20, 0));
-	snow_shapes.push_back(snowball);
-
-	Shape* snowball2 = Shape::generateSnowball(Vector2f(.3, .4), .15, Vector2f(20, 0));
-	snow_shapes.push_back(snowball2);
-}
-
-//Simulation
-void initialize_simulation() {
-	
-	//createSnowman();
-	createSnowballSmash();
-	//createHighspeedSnowballSmash();
-
-	//Convert drawn shapes to snow particles
-	PointCloud* snow = PointCloud::createShape(snow_shapes);
-	//If there are no shapes, we can't do a simulation
-	if (snow == NULL) return;
-
-	snow_simulator = new SnowSimulation(snow);
 }
 
 void redraw() {

@@ -3,9 +3,12 @@
 
 using namespace std;
 
-SnowSimulation::SnowSimulation(PointCloud* cloud) {
+SnowSimulation::SnowSimulation(Scene* scene) {
 	frameCount = 0;
-	snow = cloud;
+	
+	//Convert drawn shapes to snow particles
+	snow = PointCloud::createShape(scene->snow_shapes);
+	if (snow == NULL) return;
 
 	// Grid Initialization
 	grid = new Grid(Vector2f(0), Vector2f(WIN_METERS_X, WIN_METERS_Y), Vector2f(256, 128), snow);

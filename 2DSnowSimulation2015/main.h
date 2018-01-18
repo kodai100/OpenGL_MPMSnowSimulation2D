@@ -13,6 +13,7 @@
 #include "SimConstants.h"
 #include "Shape.h"
 #include "SnowSimulation.h"
+#include "Scene.h"
 
 void redraw();
 void initialize_simulation();

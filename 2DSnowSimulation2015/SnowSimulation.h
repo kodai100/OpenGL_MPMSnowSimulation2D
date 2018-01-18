@@ -12,6 +12,7 @@
 #include "Grid.h"
 #include "SimConstants.h"
 #include "Shape.h"
+#include "Scene.h"
 
 class SnowSimulation {
 public:
@@ -19,7 +20,7 @@ public:
 	Grid* grid;
 	PointCloud* snow;	// null check
 
-	SnowSimulation(PointCloud* snow);
+	SnowSimulation(Scene* scene);
 	SnowSimulation(const SnowSimulation& orig);
 	virtual ~SnowSimulation();
 
