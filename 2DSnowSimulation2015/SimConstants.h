@@ -28,8 +28,10 @@ static const float
 static const Vector2f GRAVITY = Vector2f(0, -9.8);
 
 //Various compiler options
-#define WIN_SIZE 640
-#define WIN_METERS 1
+#define WIN_SIZE_X 1280
+#define WIN_SIZE_Y 640
+#define WIN_METERS_X 2
+#define WIN_METERS_Y 1
 #define LIMIT_FPS false
 #define REALTIME false
 #define SUPPORTS_POINT_SMOOTH true
