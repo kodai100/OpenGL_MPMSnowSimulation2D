@@ -1,7 +1,5 @@
 #include "Scene.h"
 
-using namespace std;
-
 Scene::Scene() {}
 Scene::Scene(const Scene& scene) {}
 Scene::~Scene() {}

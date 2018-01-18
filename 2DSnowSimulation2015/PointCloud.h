@@ -34,6 +34,8 @@ public:
 	//Get bounding box [xmin, xmax, ymin, ymax]
 	void bounds(float bounds[4]);
 
+	void draw();
+
 	//Generate particles that fill a set of shapes
 	static PointCloud* createShape(std::vector<Shape*>& snow_shapes){
 

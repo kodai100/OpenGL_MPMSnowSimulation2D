@@ -369,3 +369,20 @@ void Grid::collisionParticles() const{
 			p.velocity[1] = -STICKY*p.velocity[1];
 	}
 }
+
+
+void Grid::draw() {
+
+	if (SUPPORTS_POINT_SMOOTH) glDisable(GL_POINT_SMOOTH);
+
+	//Grid nodes
+	glPointSize(1);
+	glColor3f(.2, .2, .2);
+
+	glBegin(GL_POINTS);
+	for (int i = 0; i<size[0]; i++) {
+		for (int j = 0; j<size[1]; j++)
+			glVertex2fv((origin + cellsize*Vector2f(i, j)).data);
+	}
+	glEnd();
+}

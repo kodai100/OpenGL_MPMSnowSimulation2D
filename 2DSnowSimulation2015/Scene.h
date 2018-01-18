@@ -6,9 +6,11 @@
 #include "Shape.h"
 #include "Vector2f.h"
 
+using namespace std;
+
 class Scene {
 public:
-	std::vector<Shape*> snow_shapes;
+	vector<Shape*> snow_shapes;
 
 	Scene();
 	Scene(const Scene&);

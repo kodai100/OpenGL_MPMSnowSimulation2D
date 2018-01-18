@@ -67,3 +67,23 @@ void PointCloud::bounds(float bounds[4]){
 			bounds[3] = p[1];
 	}
 }
+
+
+void PointCloud::draw() {
+	//Snow particles
+	if (SUPPORTS_POINT_SMOOTH)
+		glEnable(GL_POINT_SMOOTH);
+
+	glPointSize(2);
+	glBegin(GL_POINTS);
+	for (int i = 0; i<size; i++) {
+		Particle& p = particles[i];
+		// We can use the particle's density to vary color
+		float contrast = 0.6;
+		float density = p.density / DENSITY * contrast;
+		density += 1 - contrast;
+		glColor3f(density, density, density);
+		glVertex2fv(p.position.data);
+	}
+	glEnd();
+}

@@ -1,30 +1,58 @@
 #include "main.h"
 
-using namespace std;
+// Unity format
 
-int frame_count = 0;
+void start() {
+	Scene* scene = Scene::snowman();
+	//Scene* scene = Scene::snowballSmash();
+	//Scene* scene = Scene::highspeedSnowballSmash();
 
-vector<Shape*> snow_shapes;
-SnowSimulation* snow_simulator;
+	snow_simulator = new SnowSimulation(scene);
+}
+
+void update() {
+	cout << "Frame: " << frame_count << endl;
+	snow_simulator->update();
+}
+
+void render() {
+	// Draw grid
+	snow_simulator->grid->draw();
+
+	// Draw snow
+	snow_simulator->snow->draw();
+}
+
+
+
+
+
+
+
+// -------------- GLFW Routine ------------------------
 
 int main(int argc, char** argv) {
+
 	srand(time(NULL));
 	
 	GLFWwindow* window = initGLFWContext();
 	initGLContext();
 
-	Scene* scene = Scene::snowman();
-	snow_simulator = new SnowSimulation(scene);
+	start();
 
+	frame_count = 0;
 	while (!glfwWindowShouldClose(window)) {
-		cout << "Frame: " << frame_count++ << endl;
 
-		snow_simulator->update();
+		update();
 
-		redraw();
+		glClearColor(0, 0, 0, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
+		render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		frame_count++;
 	}
 
 	//Exit
@@ -33,43 +61,6 @@ int main(int argc, char** argv) {
 	exit(EXIT_SUCCESS);
 
 	return 0;
-}
-
-void redraw() {
-
-	glClearColor(0, 0, 0, 1);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	//Grid nodes
-	glPointSize(1);
-	glColor3f(.2, .2, .2);
-	glBegin(GL_POINTS);
-	for (int i = 0; i<snow_simulator->grid->size[0]; i++) {
-		for (int j = 0; j<snow_simulator->grid->size[1]; j++)
-			glVertex2fv((snow_simulator->grid->origin + snow_simulator->grid->cellsize*Vector2f(i, j)).data);
-	}
-	glEnd();
-
-	//Snow particles
-	if (SUPPORTS_POINT_SMOOTH)
-		glEnable(GL_POINT_SMOOTH);
-
-	glPointSize(2);
-	glBegin(GL_POINTS);
-	for (int i = 0; i<snow_simulator->snow->size; i++) {
-		Particle& p = snow_simulator->snow->particles[i];
-		// We can use the particle's density to vary color
-		float contrast = 0.6;
-		float density = p.density / DENSITY * contrast;
-		density += 1 - contrast;
-		glColor3f(density, density, density);
-		glVertex2fv(p.position.data);
-	}
-	glEnd();
-
-	if (SUPPORTS_POINT_SMOOTH)
-		glDisable(GL_POINT_SMOOTH);
-
 }
 
 
@@ -81,6 +72,7 @@ void initGLContext() {
 	glViewport(0, 0, WIN_SIZE_X, WIN_SIZE_Y);
 	glOrtho(0, WIN_METERS_X, 0, WIN_METERS_Y, 0, 1);
 }
+
 
 GLFWwindow* initGLFWContext() {
 	glfwSetErrorCallback(error_callback);
@@ -109,20 +101,16 @@ static void error_callback(int error, const char* description) {
 
 //Key listener
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	if (action != GLFW_RELEASE)
+	/*if (action != GLFW_RELEASE)
 		return;
 	switch (key) {
-	case GLFW_KEY_F12:
-		break;
-	case GLFW_KEY_ESCAPE:
-		break;
 	case GLFW_KEY_ENTER:
 		break;
-	}
+	}*/
 }
 
 //Mouse listener
 void mouse_callback(GLFWwindow* window, int btn, int action, int mods) {
-	if (action == GLFW_RELEASE && btn == GLFW_MOUSE_BUTTON_LEFT) {
-	}
+	/*if (action == GLFW_RELEASE && btn == GLFW_MOUSE_BUTTON_LEFT) {
+	}*/
 }
