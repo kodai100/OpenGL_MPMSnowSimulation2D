@@ -153,6 +153,7 @@
     <ClInclude Include="Matrix2f.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PointCloud.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="SimConstants.h" />
     <ClInclude Include="SnowSimulation.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Matrix2f.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PointCloud.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="SnowSimulation.cpp" />
     <ClCompile Include="Vector2f.cpp" />
