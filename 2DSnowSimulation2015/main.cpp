@@ -37,33 +37,41 @@ int main(int argc, char** argv) {
 }
 
 void createSnowman() {
-	Shape* snowball = Shape::generateSnowball(Vector2f(.4, .16), .15, Vector2f(0, 0));
+	Shape* snowball = Shape::generateSnowball(Vector2f(1, .16), .15, Vector2f(0, 0));
 	snow_shapes.push_back(snowball);
 
-	Shape* snowball2 = Shape::generateSnowball(Vector2f(.4, .4), .1, Vector2f(0, 0));
+	Shape* snowball2 = Shape::generateSnowball(Vector2f(1, .4), .1, Vector2f(0, 0));
 	snow_shapes.push_back(snowball2);
 
-	Shape* snowball3 = Shape::generateSnowball(Vector2f(.4, .57), .07, Vector2f(0, 0));
+	Shape* snowball3 = Shape::generateSnowball(Vector2f(1, .57), .07, Vector2f(0, 0));
 	snow_shapes.push_back(snowball3);
 
-	Shape* snowball4 = Shape::generateSnowball(Vector2f(.8, .4), .08, Vector2f(-10, 0));
+	Shape* snowball4 = Shape::generateSnowball(Vector2f(1.8, .4), .08, Vector2f(-20, -5));
 	snow_shapes.push_back(snowball4);
 }
 
 void createSnowballSmash() {
-	Shape* snowball = Shape::generateSnowball(Vector2f(.8, .6), .15, Vector2f(-10, 0));
+	Shape* snowball = Shape::generateSnowball(Vector2f(1.6, .65), .15, Vector2f(-10, 0));
 	snow_shapes.push_back(snowball);
 
-	Shape* snowball2 = Shape::generateSnowball(Vector2f(.2, .4), .15, Vector2f(10, 0));
+	Shape* snowball2 = Shape::generateSnowball(Vector2f(.3, .4), .15, Vector2f(10, 0));
+	snow_shapes.push_back(snowball2);
+}
+
+void createHighspeedSnowballSmash() {
+	Shape* snowball = Shape::generateSnowball(Vector2f(1.6, .6), .15, Vector2f(-20, 0));
+	snow_shapes.push_back(snowball);
+
+	Shape* snowball2 = Shape::generateSnowball(Vector2f(.3, .4), .15, Vector2f(20, 0));
 	snow_shapes.push_back(snowball2);
 }
 
 //Simulation
 void initialize_simulation() {
 	
-	createSnowman();
-	//createSnowballSmash();
-	
+	//createSnowman();
+	createSnowballSmash();
+	//createHighspeedSnowballSmash();
 
 	//Convert drawn shapes to snow particles
 	snow = PointCloud::createShape(snow_shapes);
@@ -72,7 +80,7 @@ void initialize_simulation() {
 	if (snow == NULL) return;
 
 	//Computational grid
-	grid = new Grid(Vector2f(0), Vector2f(WIN_METERS, WIN_METERS), Vector2f(128), snow);
+	grid = new Grid(Vector2f(0), Vector2f(WIN_METERS_X, WIN_METERS_Y), Vector2f(256, 128), snow);
 
 	//We need to estimate particle volumes before we start
 	grid->initializeMass();
@@ -143,8 +151,8 @@ void initGLContext() {
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glViewport(0, 0, WIN_SIZE, WIN_SIZE);
-	glOrtho(0, WIN_METERS, 0, WIN_METERS, 0, 1);
+	glViewport(0, 0, WIN_SIZE_X, WIN_SIZE_Y);
+	glOrtho(0, WIN_METERS_X, 0, WIN_METERS_Y, 0, 1);
 }
 
 GLFWwindow* initGLFWContext() {
@@ -153,7 +161,7 @@ GLFWwindow* initGLFWContext() {
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
 
-	GLFWwindow* window = glfwCreateWindow(WIN_SIZE, WIN_SIZE, "Snow Simulator", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(WIN_SIZE_X, WIN_SIZE_Y, "Snow Simulator", NULL, NULL);
 
 	if (!window) {
 		glfwTerminate();
