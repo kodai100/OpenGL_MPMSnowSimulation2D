@@ -12,10 +12,10 @@
 #include "Grid.h"
 #include "SimConstants.h"
 #include "Shape.h"
+#include "SnowSimulation.h"
 
 void redraw();
 void initialize_simulation();
-void simulate();
 
 GLFWwindow* initGLFWContext();
 static void error_callback(int, const char*);

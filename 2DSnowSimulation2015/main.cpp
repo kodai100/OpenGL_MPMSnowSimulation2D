@@ -5,8 +5,7 @@ using namespace std;
 int frame_count = 0;
 
 vector<Shape*> snow_shapes;
-PointCloud* snow = NULL;
-Grid* grid;
+SnowSimulation* snow_simulator;
 
 int main(int argc, char** argv) {
 	srand(time(NULL));
@@ -20,7 +19,7 @@ int main(int argc, char** argv) {
 	while (!glfwWindowShouldClose(window)) {
 		cout << "Frame: " << frame_count++ << endl;
 
-		simulate();
+		snow_simulator->update();
 
 		redraw();
 
@@ -74,38 +73,11 @@ void initialize_simulation() {
 	//createHighspeedSnowballSmash();
 
 	//Convert drawn shapes to snow particles
-	snow = PointCloud::createShape(snow_shapes);
-
+	PointCloud* snow = PointCloud::createShape(snow_shapes);
 	//If there are no shapes, we can't do a simulation
 	if (snow == NULL) return;
 
-	//Computational grid
-	grid = new Grid(Vector2f(0), Vector2f(WIN_METERS_X, WIN_METERS_Y), Vector2f(256, 128), snow);
-
-	//We need to estimate particle volumes before we start
-	grid->initializeMass();
-	grid->calculateVolumes();
-
-}
-
-void simulate() {
-	//Initialize FEM grid
-	grid->initializeMass();
-	grid->initializeVelocities();
-
-	//Compute grid velocities
-	grid->explicitVelocities(GRAVITY);
-
-#if ENABLE_IMPLICIT
-	if (IMPLICIT_RATIO > 0)
-		grid->implicitVelocities();
-#endif
-
-	//Map back to particles
-	grid->updateVelocities();
-
-	//Update particle data
-	snow->update();
+	snow_simulator = new SnowSimulation(snow);
 }
 
 void redraw() {
@@ -117,9 +89,9 @@ void redraw() {
 	glPointSize(1);
 	glColor3f(.2, .2, .2);
 	glBegin(GL_POINTS);
-	for (int i = 0; i<grid->size[0]; i++) {
-		for (int j = 0; j<grid->size[1]; j++)
-			glVertex2fv((grid->origin + grid->cellsize*Vector2f(i, j)).data);
+	for (int i = 0; i<snow_simulator->grid->size[0]; i++) {
+		for (int j = 0; j<snow_simulator->grid->size[1]; j++)
+			glVertex2fv((snow_simulator->grid->origin + snow_simulator->grid->cellsize*Vector2f(i, j)).data);
 	}
 	glEnd();
 
@@ -129,8 +101,8 @@ void redraw() {
 
 	glPointSize(2);
 	glBegin(GL_POINTS);
-	for (int i = 0; i<snow->size; i++) {
-		Particle& p = snow->particles[i];
+	for (int i = 0; i<snow_simulator->snow->size; i++) {
+		Particle& p = snow_simulator->snow->particles[i];
 		// We can use the particle's density to vary color
 		float contrast = 0.6;
 		float density = p.density / DENSITY * contrast;
