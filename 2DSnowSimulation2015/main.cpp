@@ -64,12 +64,14 @@ int main(int argc, char** argv) {
 
 
 void initGLContext() {
-	glMatrixMode(GL_MODELVIEW);
+	
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glViewport(0, 0, WIN_SIZE_X, WIN_SIZE_Y);
 	glOrtho(0, WIN_METERS_X, 0, WIN_METERS_Y, 0, 1);
+
+	glMatrixMode(GL_MODELVIEW);
 }
 
 
