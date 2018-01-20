@@ -36,7 +36,7 @@ void Grid::initializeMass(){
 		//Shape function gives a blending radius of two;
 		//so we do computations within a 2x2 square for each particle
 		for (int idx=0, y=oy-1, y_end=y+3; y<=y_end; y++){
-			if (y < 0 || y > size[1]) continue;
+			//if (y < 0 || y > size[1]) continue;
 
 			//Y-dimension interpolation
 			float y_pos = oy-y,
@@ -44,7 +44,7 @@ void Grid::initializeMass(){
 				dy = Grid::bsplineSlope(y_pos);
 			
 			for (int x=ox-1, x_end=x+3; x<=x_end; x++, idx++){
-				if (x < 0 || x > size[0]) continue;
+				//if (x < 0 || x > size[0]) continue;
 
 				//X-dimension interpolation
 				float x_pos = ox-x,
